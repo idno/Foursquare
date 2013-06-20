@@ -24,7 +24,7 @@
                     $object = $event->data()['object'];
                     if ($this->hasFoursquare()) {
                         $fsObj = $this->connect();
-                        $name = $object->name;
+                        $name = $object->placename;
                         $ll = $object->lat . ',' . $object->long;
                         error_log($ll);
                         if ($venues = $fsObj->get('/venues/search', ['ll' => $ll, 'query' => $name, 'limit' => 1])) {

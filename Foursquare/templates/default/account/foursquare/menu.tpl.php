@@ -1,0 +1,1 @@
+<li <?php if ($_SERVER['REQUEST_URI'] == '/account/foursquare/') echo 'class="active"'; ?>><a href="/account/foursquare/">Foursquare</a></li>

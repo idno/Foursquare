@@ -44,7 +44,14 @@
                                     $shout = substr(strip_tags($object->body),0,140);
                                     if (empty($shout)) $shout = '';
                                     $result = $fsObj->post('/checkins/add',['venueId' => $fs_id, 'shout' => $shout]);
-                                    error_log(var_export($result,true));
+                                    if (!empty($result->responseText)) {
+                                        if ($json = json_decode($result->responseText)) {
+                                    		if (!empty($json->response->checkin->id)) {
+                                    			$object->setPosseLink('foursquare','https://foursquare.com/forward/checkin/' . $json->response->checkin->id);
+                                    			$object->save();
+                                    		}
+                                    	}
+                                    }
                                 }
                             }
                         }

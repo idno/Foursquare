@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="span10 offset1">
-        <h3>Foursquare</h3>
+        <h1>Foursquare</h1>
         <?=$this->draw('account/menu')?>
     </div>
 

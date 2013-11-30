@@ -19,8 +19,13 @@
             }
 
             function registerEventHooks() {
+
+                \Idno\Core\site()->syndication()->registerService('foursquare', function() {
+                    return $this->hasFoursquare();
+                }, ['place']);
+
                 // Push checkins to Foursquare
-                \Idno\Core\site()->addEventHook('post/place',function(\Idno\Core\Event $event) {
+                \Idno\Core\site()->addEventHook('post/place/foursquare',function(\Idno\Core\Event $event) {
                     $object = $event->data()['object'];
                     if ($this->hasFoursquare()) {
                         $fsObj = $this->connect();

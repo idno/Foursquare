@@ -28,17 +28,13 @@
                 \Idno\Core\site()->addEventHook('post/place/foursquare',function(\Idno\Core\Event $event) {
                     $object = $event->data()['object'];
                     if ($this->hasFoursquare()) {
-                        $fsObj = $this->connect();
+                        $fsObj = $this->connect(); /* @var \EpiFoursquare $fsObj */
                         $name = $object->placename;
                         $ll = $object->lat . ',' . $object->long;
-                        error_log($ll);
-                        if ($venues = $fsObj->get('/venues/search', ['ll' => $ll, 'query' => $name, 'limit' => 1])) {
-                            error_log('Venues exist');
-                            if (!empty($venues->response->groups) && is_array($venues->response->groups)) {
-                                error_log('Groups exist');
-                                if (!empty($venues->response->groups[0]->items) && is_array($venues->response->groups[0]->items)) {
-                                    $item = array_pop($venues->response->groups[0]->items);
-                                    error_log(var_export($item,true));
+                        if ($venues = $fsObj->get('/venues/search', ['ll' => $ll, 'query' => $name, 'limit' => 1, 'v' => '20131031'])) {
+                            if (!empty($venues->response->venues) && is_array($venues->response->venues)) {
+                                if (!empty($venues->response->venues[0])) {
+                                    $item = $venues->response->venues[0];
                                     $fs_id = $item->id;
                                     if (!empty($item->location)) {
                                         $object->lat = $item->location->lat;
@@ -48,7 +44,7 @@
                                     }
                                     $shout = substr(strip_tags($object->body),0,140);
                                     if (empty($shout)) $shout = '';
-                                    $result = $fsObj->post('/checkins/add',['venueId' => $fs_id, 'shout' => $shout]);
+                                    $result = $fsObj->post('/checkins/add',['venueId' => $fs_id, 'shout' => $shout, 'v' => '20131031']);
                                     if (!empty($result->responseText)) {
                                         if ($json = json_decode($result->responseText)) {
                                     		if (!empty($json->response->checkin->id)) {

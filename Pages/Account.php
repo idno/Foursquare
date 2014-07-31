@@ -17,11 +17,7 @@
                 $this->gatekeeper(); // Logged-in users only
                 $login_url = '';
                 if ($foursquare = \Idno\Core\site()->plugins()->get('Foursquare')) {
-                    if (!$foursquare->hasFoursquare()) {
-                        if ($fs = $foursquare->connect()) {
-                            $login_url = $fs->getAuthorizeUrl(\Idno\Core\site()->config()->url . 'foursquare/callback');
-                        }
-                    }
+                    $login_url = $foursquare->getAuthURL();
                 }
                 $t = \Idno\Core\site()->template();
                 $body = $t->__(['login_url' => $login_url])->draw('account/foursquare');

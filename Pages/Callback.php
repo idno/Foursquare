@@ -24,6 +24,10 @@
                     $user->save();
                     \Idno\Core\site()->session()->addMessage('Your Foursquare account was connected.');
                 }
+                if (!empty($_SESSION['onboarding_passthrough'])) {
+                    unset($_SESSION['onboarding_passthrough']);
+                    $this->forward(\Idno\Core\site()->config()->getURL() . 'begin/connect');
+                }
                 $this->forward('/account/foursquare/');
             }
 

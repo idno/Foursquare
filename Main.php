@@ -16,6 +16,7 @@
                 // Add menu items to account & administration screens
                     \Idno\Core\site()->template()->extendTemplate('admin/menu/items','admin/foursquare/menu');
                     \Idno\Core\site()->template()->extendTemplate('account/menu/items','account/foursquare/menu');
+                \Idno\Core\site()->template()->extendTemplate('onboarding/connect/networks','onboarding/connect/foursquare');
             }
 
             function registerEventHooks() {
@@ -69,6 +70,23 @@
                     return true;
                 }
                 return false;
+            }
+
+            /**
+             * The URL to authenticate with the API
+             * @return string
+             */
+            function getAuthURL() {
+
+                $foursquare = $this;
+                $login_url = '';
+                if (!$foursquare->hasFoursquare()) {
+                    if ($fs = $foursquare->connect()) {
+                        $login_url = $fs->getAuthorizeUrl(\Idno\Core\site()->config()->url . 'foursquare/callback');
+                    }
+                }
+                return $login_url;
+
             }
 
             /**

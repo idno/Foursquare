@@ -8,13 +8,13 @@
 <div class="social">
     <a href="<?= $login_url ?>" class="connect fsqr <?php
 
-        if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare)) {
+        if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare['access_token'])) {
             echo 'connected';
         }
 
     ?>">Foursquare<?php
 
-            if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare)) {
+            if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare['access_token'])) {
                 echo ' - connected!';
             }
 

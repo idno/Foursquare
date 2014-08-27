@@ -28,7 +28,7 @@
                     unset($_SESSION['onboarding_passthrough']);
                     $this->forward(\Idno\Core\site()->config()->getURL() . 'begin/connect');
                 }
-                $this->forward('/account/foursquare/');
+                $this->forward(\Idno\Core\site()->config()->getURL() . 'account/foursquare/');
             }
 
         }

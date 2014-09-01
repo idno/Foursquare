@@ -12,7 +12,7 @@
             echo 'connected';
         }
 
-    ?>">Foursquare<?php
+    ?>" target="_top">Foursquare<?php
 
             if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare['access_token'])) {
                 echo ' - connected!';

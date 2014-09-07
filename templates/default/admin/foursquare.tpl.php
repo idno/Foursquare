@@ -19,7 +19,7 @@
                         <input type="text" class="span5" value="<?=\Idno\Core\site()->config()->url?>foursquare/callback" />
                     </p>
                     <p>
-                        Once you've finished, fill in the details below:
+                        Once you've finished, fill in the details below. You can then <a href="<?=\Idno\Core\site()->config()->getURL()?>settings/foursquare/">connect your Foursquare account</a>.
                     </p>
                 </div>
             </div>

@@ -7,6 +7,8 @@
 
             function registerPages()
             {
+                // Register the deauth URL
+                \Idno\Core\site()->addPageHandler('foursquare/deauth', '\IdnoPlugins\Foursquare\Pages\Deauth');
                 // Register the callback URL
                 \Idno\Core\site()->addPageHandler('foursquare/callback', '\IdnoPlugins\Foursquare\Pages\Callback');
                 // Register admin settings

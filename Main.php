@@ -34,34 +34,38 @@
                 \Idno\Core\site()->addEventHook('post/place/foursquare', function (\Idno\Core\Event $event) {
                     $object = $event->data()['object'];
                     if ($this->hasFoursquare()) {
-                        $fsObj = $this->connect();
-                        /* @var \EpiFoursquare $fsObj */
-                        $name = $object->placename;
-                        $ll   = $object->lat . ',' . $object->long;
-                        if ($venues = $fsObj->get('/venues/search', ['ll' => $ll, 'query' => $name, 'limit' => 1, 'v' => '20131031'])) {
-                            if (!empty($venues->response->venues) && is_array($venues->response->venues)) {
-                                if (!empty($venues->response->venues[0])) {
-                                    $item  = $venues->response->venues[0];
-                                    $fs_id = $item->id;
-                                    if (!empty($item->location)) {
-                                        $object->lat  = $item->location->lat;
-                                        $object->long = $item->location->lng;
-                                        $object->name = $item->name;
-                                        $object->save();
-                                    }
-                                    $shout = substr(strip_tags($object->body), 0, 140);
-                                    if (empty($shout)) $shout = '';
-                                    $result = $fsObj->post('/checkins/add', ['venueId' => $fs_id, 'shout' => $shout, 'v' => '20131031']);
-                                    if (!empty($result->response)) {
-                                        if ($json = $result) {
-                                            if (!empty($json->response->checkin->id)) {
-                                                $object->setPosseLink('foursquare', 'https://foursquare.com/forward/checkin/' . $json->response->checkin->id);
-                                                $object->save();
+                        try {
+                            $fsObj = $this->connect();
+                            /* @var \EpiFoursquare $fsObj */
+                            $name = $object->placename;
+                            $ll   = $object->lat . ',' . $object->long;
+                            if ($venues = $fsObj->get('/venues/search', ['ll' => $ll, 'query' => $name, 'limit' => 1, 'v' => '20131031'])) {
+                                if (!empty($venues->response->venues) && is_array($venues->response->venues)) {
+                                    if (!empty($venues->response->venues[0])) {
+                                        $item  = $venues->response->venues[0];
+                                        $fs_id = $item->id;
+                                        if (!empty($item->location)) {
+                                            $object->lat  = $item->location->lat;
+                                            $object->long = $item->location->lng;
+                                            $object->name = $item->name;
+                                            $object->save();
+                                        }
+                                        $shout = substr(strip_tags($object->body), 0, 140);
+                                        if (empty($shout)) $shout = '';
+                                        $result = $fsObj->post('/checkins/add', ['venueId' => $fs_id, 'shout' => $shout, 'v' => '20131031']);
+                                        if (!empty($result->response)) {
+                                            if ($json = $result) {
+                                                if (!empty($json->response->checkin->id)) {
+                                                    $object->setPosseLink('foursquare', 'https://foursquare.com/forward/checkin/' . $json->response->checkin->id);
+                                                    $object->save();
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                        } catch (\Exception $e) {
+                            \Idno\Core\site()->session()->addMessage("Unfortunately your post couldn't be syndicated to Foursquare.");
                         }
                     }
                 });
@@ -109,7 +113,11 @@
                     $foursquare = new \EpiFoursquare(\Idno\Core\site()->config()->foursquare['clientId'], \Idno\Core\site()->config()->foursquare['secret']);
                     if ($this->hasFoursquare()) {
                         if ($user = \Idno\Core\site()->session()->currentUser()) {
-                            $foursquare->setAccessToken($user->foursquare['access_token']);
+                            try {
+                                $foursquare->setAccessToken($user->foursquare['access_token']);
+                            } catch (\Exception $e) {
+                                \Idno\Core\site()->session()->addMessage("Unfortunately we couldn't connect to Foursquare.");
+                            }
                         }
                     }
 

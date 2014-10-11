@@ -32,7 +32,8 @@
 
                 // Push checkins to Foursquare
                 \Idno\Core\site()->addEventHook('post/place/foursquare', function (\Idno\Core\Event $event) {
-                    $object = $event->data()['object'];
+                    $eventdata = $event->data();
+                    $object = $eventdata['object'];
                     if ($this->hasFoursquare()) {
                         try {
                             $fsObj = $this->connect();

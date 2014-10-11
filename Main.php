@@ -28,7 +28,7 @@
 
                 \Idno\Core\site()->syndication()->registerService('foursquare', function () {
                     return $this->hasFoursquare();
-                }, ['place']);
+                }, array('place'));
 
                 // Push checkins to Foursquare
                 \Idno\Core\site()->addEventHook('post/place/foursquare', function (\Idno\Core\Event $event) {
@@ -40,7 +40,7 @@
                             /* @var \EpiFoursquare $fsObj */
                             $name = $object->placename;
                             $ll   = $object->lat . ',' . $object->long;
-                            if ($venues = $fsObj->get('/venues/search', ['ll' => $ll, 'query' => $name, 'limit' => 1, 'v' => '20131031'])) {
+                            if ($venues = $fsObj->get('/venues/search', array('ll' => $ll, 'query' => $name, 'limit' => 1, 'v' => '20131031'))) {
                                 if (!empty($venues->response->venues) && is_array($venues->response->venues)) {
                                     if (!empty($venues->response->venues[0])) {
                                         $item  = $venues->response->venues[0];
@@ -53,7 +53,7 @@
                                         }
                                         $shout = substr(strip_tags($object->body), 0, 140);
                                         if (empty($shout)) $shout = '';
-                                        $result = $fsObj->post('/checkins/add', ['venueId' => $fs_id, 'shout' => $shout, 'v' => '20131031']);
+                                        $result = $fsObj->post('/checkins/add', array('venueId' => $fs_id, 'shout' => $shout, 'v' => '20131031'));
                                         if (!empty($result->response)) {
                                             if ($json = $result) {
                                                 if (!empty($json->response->checkin->id)) {

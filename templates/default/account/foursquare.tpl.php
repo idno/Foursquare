@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="span10 offset1">
-	            <?=$this->draw('account/menu')?>
+        <?=$this->draw('account/menu')?>
         <h1>Foursquare</h1>
 
     </div>
@@ -14,14 +14,23 @@
                 if (empty(\Idno\Core\site()->session()->currentUser()->foursquare)) {
             ?>
                     <div class="control-group">
-                        <div class="controls">
+                        <div class="controls-config">
+	                       <div class="row">
+						   		<div class="span6">
                             <p>
-                                If you have a Foursquare account, you may connect it here. Your
-                                public checkins on this site will be copeied to Foursquare.
+                                Easily share locations to Foursquare.</p>  
+                                
+                                <p>
+                                With Foursquare connected, you can cross-post check-ins that you publish publicly on your site.
                             </p>
+						   		</div>
+	                       </div>
+	                       <div class="social span4">
+	                       
                             <p>
-                                <a href="<?=$vars['login_url']?>" class="btn btn-large btn-success">Click here to connect Foursquare to your account</a>
+                                <a href="<?=$vars['login_url']?>" class="connect fsqr">Connect Foursquare</a>
                             </p>
+	                       </div>
                         </div>
                     </div>
                 <?php
@@ -30,14 +39,18 @@
 
                     ?>
                     <div class="control-group">
-                        <div class="controls">
+                        <div class="controls-config">
+	                       <div class="row">
+						    <div class="span6">
                             <p>
-                                Your account is currently connected to Foursquare. Public checkins that you make here
-                                will be syndicated to Foursquare.
+                                Your account is currently connected to Foursquare. Public check-ins that you publish here
+                                can be cross-posted to Foursquare.
                             </p>
+						    </div>
+	                       </div>
                             <p>
                                 <input type="hidden" name="remove" value="1" />
-                                <button type="submit" class="btn-primary">Click here to remove Foursquare from your account.</button>
+                                <button type="submit" class="btn-primary">Disconnect Foursquare</button>
                             </p>
                         </div>
                     </div>

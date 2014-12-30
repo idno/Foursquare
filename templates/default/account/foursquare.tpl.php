@@ -48,10 +48,12 @@
                             </p>
 						    </div>
 	                       </div>
+	                       <div class="social">
                             <p>
                                 <input type="hidden" name="remove" value="1" />
-                                <button type="submit" class="btn-primary">Disconnect Foursquare</button>
+                                <button type="submit" class="connect fsqr connected">Disconnect Foursquare</button>
                             </p>
+	                       </div>
                         </div>
                     </div>
 

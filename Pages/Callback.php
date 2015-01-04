@@ -20,7 +20,14 @@
                     $token = $fsObj->getAccessToken($this->getInput('code'), \Idno\Core\site()->config()->url . 'foursquare/callback');
                     $fsObj->setAccessToken($token->access_token);
                     $user = \Idno\Core\site()->session()->currentUser();
-                    $user->foursquare = array('access_token' => $token->access_token);
+                    if ($fs_user = $fsObj->get('/users/self', array('v' => '20150103'))) {
+                        $fs_user = $fs_user->response->user;
+                        $id = $fs_user->id;
+                        $name = $fs_user->firstName . ' ' . $fs_user->lastName;
+                        $user->foursquare[$id] = ['access_token' => $token->access_token, 'name' => $name, 'id' => $id];
+                    } else {
+                        $user->foursquare = array('access_token' => $token->access_token);
+                    }
                     $user->save();
                     \Idno\Core\site()->session()->addMessage('Your Foursquare account was connected.');
                 }

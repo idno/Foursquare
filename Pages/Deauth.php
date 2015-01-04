@@ -14,7 +14,13 @@
                 $this->gatekeeper(); // Logged-in users only
                 if ($twitter = \Idno\Core\site()->plugins()->get('Foursquare')) {
                     if ($user = \Idno\Core\site()->session()->currentUser()) {
-                        $user->foursquare = false;
+                        if ($account = $this->getInput('remove')) {
+                            if (array_key_exists($account, $user->foursquare)) {
+                                unset($user->foursquare[$account]);
+                            } else {
+                                $user->foursquare = false;
+                            }
+                        }
                         $user->save();
                         \Idno\Core\site()->session()->refreshSessionUser($user);
                         if (!empty($user->link_callback)) {

@@ -2,6 +2,10 @@
 
     namespace IdnoPlugins\Foursquare {
 
+        require_once(dirname(__FILE__) . '/external/foursquare-async/EpiCurl.php');
+        require_once(dirname(__FILE__) . '/external/foursquare-async/EpiFoursquare.php');
+        require_once(dirname(__FILE__) . '/external/foursquare-async/EpiSequence.php');
+
         class Main extends \Idno\Common\Plugin
         {
 
@@ -30,13 +34,25 @@
                     return $this->hasFoursquare();
                 }, array('place'));
 
+                if ($this->hasFoursquare()) {
+                    if (is_array(\Idno\Core\site()->session()->currentUser()->foursquare) && !array_key_exists('access_token', \Idno\Core\site()->session()->currentUser()->foursquare)) {
+                        foreach(\Idno\Core\site()->session()->currentUser()->foursquare as $username => $details) {
+                            \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', $username, $details['name']);
+                        }
+                    }
+                }
+
                 // Push checkins to Foursquare
                 \Idno\Core\site()->addEventHook('post/place/foursquare', function (\Idno\Core\Event $event) {
                     $eventdata = $event->data();
                     $object = $eventdata['object'];
                     if ($this->hasFoursquare()) {
                         try {
-                            $fsObj = $this->connect();
+                            if (!empty($eventdata['syndication_account'])) {
+                                $fsObj = $this->connect($eventdata['syndication_account']);
+                            } else {
+                                $fsObj = $this->connect();
+                            }
                             /* @var \EpiFoursquare $fsObj */
                             $name = $object->placename;
                             $ll   = $object->lat . ',' . $object->long;
@@ -78,7 +94,10 @@
              */
             function hasFoursquare()
             {
-                if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare['access_token'])) {
+                if (!(\Idno\Core\site()->session()->currentUser())) {
+                    return false;
+                }
+                if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare)) {
                     return true;
                 }
 
@@ -94,10 +113,8 @@
 
                 $foursquare = $this;
                 $login_url  = '';
-                if (!$foursquare->hasFoursquare()) {
-                    if ($fs = $foursquare->connect()) {
-                        $login_url = $fs->getAuthorizeUrl(\Idno\Core\site()->config()->url . 'foursquare/callback');
-                    }
+                if ($fs = $foursquare->connect()) {
+                    $login_url = $fs->getAuthorizeUrl(\Idno\Core\site()->config()->getDisplayURL() . 'foursquare/callback');
                 }
 
                 return $login_url;
@@ -108,14 +125,20 @@
              * Connect to Foursquare
              * @return bool|\Foursquare
              */
-            function connect()
+            function connect($username = false)
             {
                 if (!empty(\Idno\Core\site()->config()->foursquare)) {
                     $foursquare = new \EpiFoursquare(\Idno\Core\site()->config()->foursquare['clientId'], \Idno\Core\site()->config()->foursquare['secret']);
                     if ($this->hasFoursquare()) {
                         if ($user = \Idno\Core\site()->session()->currentUser()) {
                             try {
-                                $foursquare->setAccessToken($user->foursquare['access_token']);
+                                if (!empty($username)) {
+                                    $foursquare->setAccessToken($user->foursquare[$username]['access_token']);
+                                } else {
+                                    if (!empty($user->foursquare['access_token'])) {
+                                        $foursquare->setAccessToken($user->foursquare['access_token']);
+                                    }
+                                }
                             } catch (\Exception $e) {
                                 \Idno\Core\site()->session()->addMessage("Unfortunately we couldn't connect to Foursquare.");
                             }
@@ -130,10 +153,4 @@
 
         }
 
-    }
-
-    namespace {
-        require_once(dirname(__FILE__) . '/external/foursquare-async/EpiCurl.php');
-        require_once(dirname(__FILE__) . '/external/foursquare-async/EpiFoursquare.php');
-        require_once(dirname(__FILE__) . '/external/foursquare-async/EpiSequence.php');
     }

@@ -25,7 +25,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="social span4">
+                        <div class="social span6">
 
                             <p>
                                 <a href="<?= $vars['login_url'] ?>" class="connect fsqr">Connect Foursquare</a>

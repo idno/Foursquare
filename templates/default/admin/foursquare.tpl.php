@@ -39,7 +39,7 @@
             
                       <div class="control-group">
 	          <p>
-                        After the Foursquare application is configured, you must enable it under Plugins.
+                        After the Foursquare application is configured, you must connect under account Settings.
                     </p>
 
           </div>  

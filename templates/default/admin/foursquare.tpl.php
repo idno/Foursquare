@@ -27,13 +27,13 @@
                     </p>
                 <label class="control-label" for="name">Client ID</label>
                 <div class="controls">
-                    <input type="text" id="name" placeholder="Client ID" class="span4" name="clientId" value="<?=htmlspecialchars(\Idno\Core\site()->config()->foursquare['clientId'])?>" >
+                    <input type="text" id="name" placeholder="Client ID" class="span6" name="clientId" value="<?=htmlspecialchars(\Idno\Core\site()->config()->foursquare['clientId'])?>" >
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="name">Client secret</label>
                 <div class="controls">
-                    <input type="text" id="name" placeholder="Client secret" class="span4" name="secret" value="<?=htmlspecialchars(\Idno\Core\site()->config()->foursquare['secret'])?>" >
+                    <input type="text" id="name" placeholder="Client secret" class="span6" name="secret" value="<?=htmlspecialchars(\Idno\Core\site()->config()->foursquare['secret'])?>" >
                 </div>
             </div>
             

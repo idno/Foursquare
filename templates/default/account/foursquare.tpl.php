@@ -48,7 +48,7 @@
                                     can be cross-posted to Foursquare.
                                 </p>
 
-                        <div class="social">
+                        <div class="social span6">
                             <form action="<?= \Idno\Core\site()->config()->getDisplayURL() ?>foursquare/deauth"
                                   class="form-horizontal" method="post">
                                 <p>
@@ -83,7 +83,7 @@
                                 foreach ($accounts as $account) {
 
                                     ?>
-                                    <div class="social">
+                                    <div class="social span6">
                                     <form action="<?= \Idno\Core\site()->config()->getDisplayURL() ?>foursquare/deauth"
                                           class="form-horizontal" method="post">
                                         <p>
@@ -94,6 +94,7 @@
                                             <?= \Idno\Core\site()->actions()->signForm('/foursquare/deauth/') ?>
                                         </p>
                                     </form>
+                                    </div>
                                 <?php
 
                                 }
@@ -101,8 +102,8 @@
                             } else {
 
                                 ?>
-                    			</div>
-                                <div class="social">
+                    			
+                                <div class="social span6">
                                     <form action="<?= \Idno\Core\site()->config()->getDisplayURL() ?>foursquare/deauth"
                                           class="form-horizontal" method="post">
                                         <p>
@@ -112,13 +113,14 @@
                                             <?= \Idno\Core\site()->actions()->signForm('/account/foursquare/') ?>
                                         </p>
                                     </form>
+                                    </div>
 
                             <?php
 
                             }
 
                         ?>
-                    			</div>
+                    			
 									<p>
 										<a href="<?= $vars['login_url'] ?>" class=""><icon class="icon-plus"></icon> Click here
                             to connect another Foursquare account</a>

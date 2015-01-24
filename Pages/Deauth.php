@@ -20,6 +20,8 @@
                             } else {
                                 $user->foursquare = false;
                             }
+                        } else {
+                            $user->foursquare = false;
                         }
                         $user->save();
                         \Idno\Core\site()->session()->refreshSessionUser($user);

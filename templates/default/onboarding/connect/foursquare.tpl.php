@@ -1,7 +1,7 @@
 <?php
 
     if ($foursquare = \Idno\Core\site()->plugins()->get('Foursquare')) {
-        if (empty(\Idno\Core\site()->session()->currentUser()->foursquare)) {
+        if (empty(\Idno\Core\site()->session()->currentUser()->foursquare['access_token'])) {
             $login_url = $foursquare->getAuthURL();
         } else {
             $login_url = \Idno\Core\site()->config()->getURL() . 'foursquare/deauth';

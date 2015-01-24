@@ -20,7 +20,8 @@
                     $token = $fsObj->getAccessToken($this->getInput('code'), \Idno\Core\site()->config()->getDisplayURL() . 'foursquare/callback');
                     $fsObj->setAccessToken($token->access_token);
                     $user = \Idno\Core\site()->session()->currentUser();
-                    if ($fs_user = $fsObj->get('/users/self', array('v' => '20150103')) && \Idno\Core\site()->config()->multipleSyndicationAccounts()) {
+                    $fs_user = $fsObj->get('/users/self', array('v' => '20150103'));
+                    if (!empty($fs_user) && \Idno\Core\site()->config()->multipleSyndicationAccounts()) {
                         $fs_user = $fs_user->response->user;
                         $id = $fs_user->id;
                         $name = $fs_user->firstName . ' ' . $fs_user->lastName;

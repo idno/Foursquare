@@ -17,7 +17,7 @@
                 $this->gatekeeper(); // Logged-in users only
                 if ($foursquare = \Idno\Core\site()->plugins()->get('Foursquare')) {
                     $fsObj = $foursquare->connect();
-                    $token = $fsObj->getAccessToken($this->getInput('code'), \Idno\Core\site()->config()->url . 'foursquare/callback');
+                    $token = $fsObj->getAccessToken($this->getInput('code'), \Idno\Core\site()->config()->getDisplayURL() . 'foursquare/callback');
                     $fsObj->setAccessToken($token->access_token);
                     $user = \Idno\Core\site()->session()->currentUser();
                     if ($fs_user = $fsObj->get('/users/self', array('v' => '20150103')) && \Idno\Core\site()->config()->multipleSyndicationAccounts()) {

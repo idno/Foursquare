@@ -35,9 +35,13 @@
                 }, array('place'));
 
                 if ($this->hasFoursquare()) {
-                    if (is_array(\Idno\Core\site()->session()->currentUser()->foursquare) && !array_key_exists('access_token', \Idno\Core\site()->session()->currentUser()->foursquare)) {
+                    if (is_array(\Idno\Core\site()->session()->currentUser()->foursquare)) {
                         foreach(\Idno\Core\site()->session()->currentUser()->foursquare as $username => $details) {
-                            \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', $username, $details['name']);
+                            if ($username != 'access_token') {
+                                \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', $username, $details['name']);
+                            } else {
+                                \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', 'Foursquare', 'Foursquare');
+                            }
                         }
                     }
                 }

@@ -54,8 +54,14 @@
                         try {
                             if (!empty($eventdata['syndication_account'])) {
                                 $fsObj = $this->connect($eventdata['syndication_account']);
+                                if (!empty(\Idno\Core\site()->session()->currentUser()->foursquare[$eventdata['syndication_account']])) {
+                                    $name = \Idno\Core\site()->session()->currentUser()->foursquare[$eventdata['syndication_account']]['name'];
+                                }
                             } else {
                                 $fsObj = $this->connect();
+                            }
+                            if (empty($name)) {
+                                $name = 'Foursquare';
                             }
                             /* @var \EpiFoursquare $fsObj */
                             $name = $object->placename;
@@ -77,7 +83,7 @@
                                         if (!empty($result->response)) {
                                             if ($json = $result) {
                                                 if (!empty($json->response->checkin->id)) {
-                                                    $object->setPosseLink('foursquare', 'https://foursquare.com/forward/checkin/' . $json->response->checkin->id);
+                                                    $object->setPosseLink('foursquare', 'https://foursquare.com/forward/checkin/' . $json->response->checkin->id, $name);
                                                     $object->save();
                                                 }
                                             }

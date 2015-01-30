@@ -1,1 +1,1 @@
-<i class="icon-foursquare"></i>
+<i class="icon-frsqr"></i>

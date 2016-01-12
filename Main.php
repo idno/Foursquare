@@ -34,17 +34,19 @@
                     return $this->hasFoursquare();
                 }, array('place'));
 
-                if ($this->hasFoursquare()) {
-                    if (is_array(\Idno\Core\site()->session()->currentUser()->foursquare)) {
-                        foreach(\Idno\Core\site()->session()->currentUser()->foursquare as $username => $details) {
-                            if ($username != 'access_token') {
-                                \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', $username, $details['name']);
-                            } else {
-                                \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', 'Foursquare', 'Foursquare');
+                \Idno\Core\site()->addEventHook('user/auth/success', function (\Idno\Core\Event $event) {
+                    if ($this->hasFoursquare()) {
+                        if (is_array(\Idno\Core\site()->session()->currentUser()->foursquare)) {
+                            foreach(\Idno\Core\site()->session()->currentUser()->foursquare as $username => $details) {
+                                if ($username != 'access_token') {
+                                    \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', $username, $details['name']);
+                                } else {
+                                    \Idno\Core\site()->syndication()->registerServiceAccount('foursquare', 'Foursquare', 'Foursquare');
+                                }
                             }
                         }
                     }
-                }
+                });
 
                 // Push checkins to Foursquare
                 \Idno\Core\site()->addEventHook('post/place/foursquare', function (\Idno\Core\Event $event) {

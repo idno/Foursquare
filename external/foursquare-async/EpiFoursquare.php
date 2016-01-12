@@ -109,7 +109,7 @@
         private function request($method, $endpoint, $params = null)
         {
 
-            error_log("Requestiing {$method} {$endpoint} " . json_encode($params));
+            error_log("Requesting {$method} {$endpoint} " . json_encode($params));
 
             if (preg_match('#^https?://#', $endpoint))
                 $url = $endpoint;

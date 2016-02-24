@@ -19,12 +19,15 @@
                 \Idno\Core\site()->addPageHandler('admin/foursquare', '\IdnoPlugins\Foursquare\Pages\Admin');
                 // Register settings page
                 \Idno\Core\site()->addPageHandler('account/foursquare', '\IdnoPlugins\Foursquare\Pages\Account');
+                // Register venue page
+                \Idno\Core\site()->addPageHandler('foursquare/venues', '\IdnoPlugins\Foursquare\Pages\Venues');
 
                 /** Template extensions */
                 // Add menu items to account & administration screens
                 \Idno\Core\site()->template()->extendTemplate('admin/menu/items', 'admin/foursquare/menu');
                 \Idno\Core\site()->template()->extendTemplate('account/menu/items', 'account/foursquare/menu');
                 \Idno\Core\site()->template()->extendTemplate('onboarding/connect/networks', 'onboarding/connect/foursquare');
+                \Idno\Core\site()->template()->extendTemplate('shell/footer', 'entry/footer');
             }
 
             function registerEventHooks()
@@ -133,6 +136,20 @@
 
             }
 
+                function getVenues($ll) {
+		    $response = false;
+                    if ($this->hasFoursquare()) {
+			     \Idno\Core\Idno::site()->logging->debug('VEN ll'.$ll);
+                                $fsObj = $this->connect();
+                            /* @var \EpiFoursquare $fsObj */
+                            if ($venues = $fsObj->get('/venues/search', array('ll' => $ll, 'v' => '20131031'))) {
+                                if (!empty($venues->response->venues) && is_array($venues->response->venues)) {
+                                        $response  = $venues->response->venues;
+				    }
+                                } 
+                            }
+		    return $response;
+            }
             /**
              * Connect to Foursquare
              * @return bool|\Foursquare

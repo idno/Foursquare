@@ -1,10 +1,9 @@
 
 var venues = [];
-var map = null;
 
 $(function () {
     
-    $('input[name="syndication[]"]').change(function () {
+   $(document).on('change', 'input[name="syndication[]"]',function(){
         var latitude = $('#lat').val(), longitude = $('#long').val();
         if ($('input[name="syndication[]"]').prop("checked")) {
             if (longitude && longitude) {
@@ -17,7 +16,6 @@ $(function () {
                 dropdown += '    <span class="caret"></span></a>';
                 dropdown += '    <ul class="dropdown-menu">';
                 $('input[type="submit"]').prop('disabled', true);
-                console.log("fsq " + fsq + "?ll=" + ltlg);
                 $.getJSON(fsq, {ll: ltlg})
                         .done(function (data) {
                             $.each(data, function (key, val) {
@@ -60,7 +58,6 @@ $(document).ready(function () {
 
 
 $(document).on('click', 'a.venue-name', function () {
-    console.log("VENUE CLICKED");
     venueControlId = $(this).data('key');
     $('#venue-button').html($(this).html() + ' <span class="caret"></span>');
     $('#venue-button').click();
@@ -69,8 +66,6 @@ $(document).on('click', 'a.venue-name', function () {
     var venue_name = venues[venue_key].name;
     var lat = venues[venue_key].lat;
     var lng = venues[venue_key].long;
-    console.log("venue name: " + venue_name);
-    console.log("venue addresse: " + venue_address);
     $('#user_address').val(venue_address);
     $('#placename').val(venue_name);
     $('#venuename').val(venue_name);
@@ -95,7 +90,6 @@ function queryLocation(latitude, longitude) {
         type: 'post',
         data: {lat: latitude.toString(), long: longitude.toString()}
     }).done(function (data) {
-        console.log(data);
         $('#lat').val(latitude);
         $('#long').val(longitude);
         $('#address').val(data.display_name);

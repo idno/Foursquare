@@ -139,7 +139,6 @@
                 function getVenues($ll) {
 		    $response = false;
                     if ($this->hasFoursquare()) {
-			     \Idno\Core\Idno::site()->logging->debug('VEN ll'.$ll);
                                 $fsObj = $this->connect();
                             /* @var \EpiFoursquare $fsObj */
                             if ($venues = $fsObj->get('/venues/search', array('ll' => $ll, 'v' => '20131031'))) {

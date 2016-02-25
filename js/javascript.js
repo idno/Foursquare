@@ -1,5 +1,6 @@
-
+var venueControlId = 0;
 var venues = [];
+var fsqEnabled = false;
 
 $(function () {
     
@@ -37,29 +38,24 @@ $(function () {
 });
 
 
-$('.DDvenue-name').on('click', function (p) {
-    p.preventDefault();
-    var venue_key = $(this).data('key');
-    var venue_address = venue[venue_key].address;
-    var venue_name = venue[venue_key].name;
-    $('user_address').val(venue_address);
-    $('#placename').val(venue_name);
-    $('#venuename').val(venue_name);
-    $('input[type="submit"]').prop('disabled', false);
-});
 
 $(document).ready(function () {
     $('.venue-name').each(function () {
-        if ($(this).data('key') == venue - control - id) {
-            $('#venue-button').html($(this).html() + ' <span class="caret"></span>');
+        if ($(this).data('key') == venueControlId) {
+		var html = $(this).html();
+		html.replace('_bg','');
+            $('#venue-button').html($(this).html().replace('_bg','') + ' <span class="caret"></span>');
         }
-    })
+    });
 });
 
 
 $(document).on('click', 'a.venue-name', function () {
     venueControlId = $(this).data('key');
+    src = $(this).children('img').attr('src');
+    src = src.replace('_bg','');
     $('#venue-button').html($(this).html() + ' <span class="caret"></span>');
+    $('#venue-button').children('img').attr('src',src);
     $('#venue-button').click();
     var venue_key = $(this).data('key');
     var venue_address = venues[venue_key].address;
@@ -78,12 +74,7 @@ $(document).on('click', 'a.venue-name', function () {
     CheckinMap.panTo(newLatLng);
 });
 
-$('#access-control-id').on('change', function () {
-
-});
-var venueControlId = 0;
-
-
+//get address from location
 function queryLocation(latitude, longitude) {
     $.ajax({
         url: '/checkin/callback',
@@ -96,6 +87,29 @@ function queryLocation(latitude, longitude) {
         $('#user_address').val(data.display_name);
     });
 }
+
+// get new venues after moving marker
+$(document).on('mouseup mousedown', '.leaflet-marker-icon', function () {
+    var ll = CheckinMarker.getLatLng();
+    CheckinMap.setView(ll, 15);
+    var latitude = $('#lat').val(), longitude = $('#long').val();
+    if (fsqEnabled && latitude && longitude) {
+        var ltlg = latitude + "," + longitude;
+        var fsq = wwwroot() + "foursquare/venues";
+        var options = "";
+        $.getJSON(fsq, {ll: ltlg})
+                .done(function (data) {
+                    $.each(data, function (key, val) {
+                        options += '<li> <a href="#" class="venue-name"  data-key = "' + key + '">' + '<img src="' + val.icon32 + '" width="18" height="18"> ' + val.name + '</a></li>';
+                    });
+                    venues = data;
+                    $('ul.dropdown-menu').html(options);
+                    $('input[type="submit"]').prop('disabled', true);
+                    $('#venue-button').html('        <i class="fa fa-foursquare"></i>Select Foursquare Venue');
+                });
+    }
+
+});
 
 
 

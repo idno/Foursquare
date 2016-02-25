@@ -89,7 +89,7 @@ function queryLocation(latitude, longitude) {
 }
 
 // get new venues after moving marker
-$(document).on('mouseup mousedown', '.leaflet-marker-icon', function () {
+$(document).on('mouseup mousedown touchstart touchend', '.leaflet-marker-icon', function () {
     var ll = CheckinMarker.getLatLng();
     CheckinMap.setView(ll, 15);
     var latitude = $('#lat').val(), longitude = $('#long').val();
@@ -110,6 +110,3 @@ $(document).on('mouseup mousedown', '.leaflet-marker-icon', function () {
     }
 
 });
-
-
-
